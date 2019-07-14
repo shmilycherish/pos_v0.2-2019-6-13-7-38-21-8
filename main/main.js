@@ -3,28 +3,27 @@
 const allItems = loadAllItems();
 
 function printReceipt(inputs) {
-  let items = generateItemDetails(inputs);
-  let receipt = generateReceiptTemplate(generateReciptBody(items), getTotalCost(items))
+  const items = generateItemDetails(inputs);
+  const receipt = generateReceiptTemplate(generateReciptBody(items), getTotalCost(items));
   console.log(receipt);
 }
 
 function generateItemDetails(inputs) {
   return inputs.reduce((result, itemBarcode) => {
-    let item = result.filter(itemDetail => itemDetail.itemInfo.barcode == itemBarcode);
+    const item = result.filter(itemDetail => itemDetail.itemInfo.barcode === itemBarcode);
     if(item.length !== 0) {
       item[0].count++;
       item[0].total += item[0].itemInfo.price;
     } else {
-      let itemOriginInfo = findItemDetailByBarcode(itemBarcode);
-      result.push({itemInfo: findItemDetailByBarcode(itemBarcode), count: 1, total:itemOriginInfo.price})
+      const itemOriginInfo = findItemDetailByBarcode(itemBarcode);
+      result.push({itemInfo: findItemDetailByBarcode(itemBarcode), count: 1, total:itemOriginInfo.price});
     }
     return result;
   }, []);
 }
 
 function findItemDetailByBarcode(barcode) {
-  let item = allItems.filter(item => item.barcode === barcode)[0];
-  return item;
+  return allItems.filter(item => item.barcode === barcode)[0];
 }
 
 function generateReceiptTemplate(itemDetails, totalCost) {
@@ -32,11 +31,11 @@ function generateReceiptTemplate(itemDetails, totalCost) {
 ${itemDetails}
 ----------------------
 总计：${formatPrice(totalCost)}(元)
-**********************`
+**********************`;
 }
 
 function getTotalCost(items) {
-  return items.reduce((totalCost, item) => totalCost + item.total, 0)
+  return items.reduce((totalCost, item) => totalCost + item.total, 0);
 }
 
 function gernerateItemDescription(itemDetail) {
@@ -44,7 +43,7 @@ function gernerateItemDescription(itemDetail) {
 }
 
 function generateReciptBody(items) {
-  return items.map(item => gernerateItemDescription(item)).join("\n");
+  return items.map(item => gernerateItemDescription(item)).join('\n');
 }
 
 function formatPrice(price) {
